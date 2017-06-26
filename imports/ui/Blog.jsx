@@ -68,7 +68,7 @@ export default class Blog extends Component {
               <RaisedButton label="Discard" secondary={true} style={{ paddingRight: 5 }} onClick={this.toggleEditMode.bind(this)} />
               <RaisedButton label="Save" primary={true} onClick={this.handleUpdateBlog.bind(this)} />
             </div>
-          </div>
+          </div> 
         ) : (
             <div>
               {isBlogOwner && (
