@@ -1,5 +1,6 @@
 import '../imports/api/blogs.js';
 import { Blogs } from '../imports/api/blogs.js';
+import { check } from 'meteor/check';
 
 Meteor.publish('blogs', function blogsPublication(userName) {
     const query = {};

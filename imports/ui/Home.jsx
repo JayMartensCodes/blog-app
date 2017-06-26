@@ -1,9 +1,14 @@
 import AccountsUIWrapper from './AccountsUIWrapper.jsx';
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Blogs } from '../api/blogs.js';
 import Blog from './Blog'
 import { Link } from 'react-router-dom';
+import TextField from 'material-ui/TextField';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import RaisedButton from 'material-ui/RaisedButton';
 
 class Home extends Component {
 
@@ -13,16 +18,23 @@ class Home extends Component {
     ));
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      blogTitleField: "",
+      blogBodyField: ""
+    };
+  }
+
   handleAddNewBlog(event) {
     event.preventDefault();
-    console.log("Test");
-    const blogTitle = ReactDOM.findDOMNode(this.refs.titleInput).value.trim();
-    const blogContents = ReactDOM.findDOMNode(this.refs.blogInput).value.trim();
-
+    const blogTitle = this.state.blogTitleField.trim();
+    const blogContents = this.state.blogBodyField.trim();
     if (blogTitle && blogContents) {
       Meteor.call('blogs.insert', blogTitle, blogContents);
-      ReactDOM.findDOMNode(this.refs.titleInput).value = '';
-      ReactDOM.findDOMNode(this.refs.blogInput).value = '';
+      this.state.blogTitleField = '';
+      this.state.blogBodyField = '';
     }
   }
 
@@ -34,8 +46,8 @@ class Home extends Component {
         <header>
           <h1>Blogs</h1>
           <div style={{ float: 'right' }}>
-            {this.props.currentUser &&(
-              <span style={{paddingRight: 20}}><Link to={`/${userName}`}>Profile</Link></span>
+            {this.props.currentUser && (
+              <span style={{ paddingRight: 20 }}><Link to={`/${userName}`}>Profile</Link></span>
             )}
             <AccountsUIWrapper />
           </div>
@@ -43,21 +55,30 @@ class Home extends Component {
         {(this.props.currentUser && (this.props.match.params.id == userName)) ?
           <div className={"blog_container"}>
             <form className="new-blog" onSubmit={this.handleAddNewBlog.bind(this)}>
-              <input
-                className="blog-title-field"
-                type="text"
-                ref="titleInput"
-                placeholder="Blog Title"
-              />
-              <input
-                className="blog-body-field"
-                type="textarea"
-                cols='60'
-                rows='8'
-                ref="blogInput"
-                placeholder="Blog"
-              />
-              <input type="submit" className="blog-submit-button" value="Post Blog" />
+              <div>
+                <TextField
+                  className="blog-title-field"
+                  value={this.state.blogTitleField}
+                  onChange={e => this.setState({ blogTitleField: e.target.value })}
+                  placeholder="Blog Title"
+                  fullWidth={true}
+                />
+              </div>
+              <div>
+                <TextField
+                  className="blog-body-field"
+                  value={this.state.blogBodyField}
+                  onChange={e => this.setState({ blogBodyField: e.target.value })}
+                  placeholder="Blog"
+                  multiLine={true}
+                  rows={1}
+                  rowsMax={10}
+                  fullWidth={true}
+                />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
+                <RaisedButton label="Post Blog" primary={true} onClick={this.handleAddNewBlog.bind(this)} />
+              </div>
             </form>
           </div>
           : ''
