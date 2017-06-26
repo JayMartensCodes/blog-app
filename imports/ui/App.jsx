@@ -4,6 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Blogs } from '../api/blogs.js';
  
 import Blog from './Blog.jsx';
+import AccountsUIWrapper from './AccountsUIWrapper.jsx';
  
 // App component - represents the whole app
 class App extends Component {
@@ -19,6 +20,9 @@ class App extends Component {
       <div className="container">
         <header>
           <h1>Blogs</h1>
+          <div style={{float: 'right'}}>
+            <AccountsUIWrapper />
+          </div>
         </header>
         
         {this.renderBlogs()}
