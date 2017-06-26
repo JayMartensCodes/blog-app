@@ -1,18 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
+ 
+import { Blogs } from '../api/blogs.js';
  
 import Blog from './Blog.jsx';
  
 // App component - represents the whole app
-export default class App extends Component {
-  getBlogs() {
-    return [
-      { _id: 1, title: 'Tinkering Blog', body: "Test" },
-      { _id: 2, title: 'Tinkering Blog2', body: "Test2"}, 
-    ];
-  }
+class App extends Component {
  
   renderBlogs() {
-    return this.getBlogs().map((blog) => (
+    return this.props.blogs.map((blog) => (
       <Blog key={blog._id} blog={blog} />
     ));
   }
@@ -30,3 +27,13 @@ export default class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  blogs: PropTypes.array.isRequired,
+};
+ 
+export default createContainer(() => {
+  return {
+    blogs: Blogs.find({}).fetch(),
+  };
+}, App);
