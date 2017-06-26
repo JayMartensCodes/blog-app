@@ -26,5 +26,19 @@ Meteor.methods({
  
     Blogs.remove(blogId);
   },
+
+  'blogs.update'(blogId, title, body) {
+    check(blogId, String);
+    check(title, String); 
+    check(body, String);
+ 
+    Blogs.update(blogId, { $set: {
+    title,
+      body,
+      lastEdited: new Date(),
+      owner: Meteor.userId(),
+      username: Meteor.user().username,
+    }});
+  },
   
 });

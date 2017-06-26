@@ -120,3 +120,7 @@ form {
 .new-blog input:focus{
   outline: 0;
 }
+
+.hover:hover {
+    cursor: pointer;
+}
